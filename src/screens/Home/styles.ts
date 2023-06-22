@@ -37,7 +37,7 @@ export const UserInfoText = styled.Text`
   font-family: ${props => props.theme.fonts.regular};
 `;
 
-export const SignOutButton = styled(RectButton)`
+export const SignOutButton = styled.TouchableOpacity`
   justify-content: center;
 
   align-items: center;

@@ -25,7 +25,6 @@ export function SignIn() {
   const { signIn, isLoggingIn } = useAuth();
   const theme = useTheme();
 
-
   async function handleSignIn() {
     try {
       await signIn()
@@ -33,13 +32,6 @@ export function SignIn() {
       Alert.alert("Erro SignIn", "Ocorreu um erro ao tentar logar no app")
     }
   }
-  // creates a function to handle sign in
-    // try to call and wait signIn
-    // if fails, display an Alert with the title "Erro SignIn" and message "Ocorreu um erro ao tentar logar no app"
-
-    // const signInButtonProps = {
-    //   onPress: your-signIn-function
-    // }
 
   return (
     <Container

@@ -60,16 +60,12 @@ function AuthProvider({ children }: AuthProviderData) {
       `&force_verify=${FORCE_VERIFY}` +
       `&state=${STATE}`;
 
-      console.log(authUrl)
-
       const response = await startAsync({ authUrl })
 
       if (response.type != "success" || response.params.error === "access_denied") return
-
       if (response.params.state != STATE) throw new Error("Invalid state value")
       
       api.defaults.headers.common['Authorization'] = `Bearer ${response.params.access_token}`;
-
       const userResponse = await api.get('/users');
 
       setUser(userResponse.data.data[0])
@@ -83,23 +79,18 @@ function AuthProvider({ children }: AuthProviderData) {
 
   async function signOut() {
     try {
-      // set isLoggingOut to true
-
-      // call revokeAsync with access_token, client_id and twitchEndpoint revocation
+      setIsLoggingOut(true)
+      
+      await revokeAsync({token: userToken, clientId: CLIENT_ID},{revocationEndpoint: twitchEndpoints.revocation})
     } catch (error) {
     } finally {
-      // set user state to an empty User object
-      // set userToken state to an empty string
+      setUser({} as User)
+      setUserToken("")
+      delete api.defaults.headers.common['Authorization'];
 
-      // remove "access_token" from request's authorization header
-
-      // set isLoggingOut to false
+      setIsLoggingOut(false)
     }
   }
-
-  useEffect(() => {
-    // add client_id to request's "Client-Id" header
-  }, [])
 
   return (
     <AuthContext.Provider value={{ user, isLoggingOut, isLoggingIn, signIn, signOut }}>
